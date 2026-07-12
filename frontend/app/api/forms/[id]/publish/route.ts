@@ -2,18 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const response = await fetch(
-      `${process.env.BACKEND_URL}/api/forms/${params.id}/publish`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const { id } = await context.params;
+    
+    const response = await fetch(`http://localhost:8000/api/forms/${id}/publish`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     const data = await response.json();
 
@@ -26,6 +25,7 @@ export async function PATCH(
 
     return NextResponse.json(data);
   } catch (error) {
+    console.error("Publish error:", error);
     return NextResponse.json(
       { error: "Failed to publish form" },
       { status: 500 }

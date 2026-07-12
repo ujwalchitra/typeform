@@ -1,59 +1,96 @@
-const BACKEND_URL = "http://127.0.0.1:8000";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
-    const response = await fetch(`${BACKEND_URL}/forms/`, {
+    const { id } = await context.params;
+    
+    const response = await fetch(`http://localhost:8000/api/forms/${id}`, {
       cache: "no-store",
     });
 
     const data = await response.json();
 
-    return Response.json(data, {
-      status: response.status,
-    });
-  } catch (error) {
-    console.error("GET forms error:", error);
+    if (!response.ok) {
+      return NextResponse.json(
+        { error: data.detail || "Failed to fetch form" },
+        { status: response.status }
+      );
+    }
 
-    return Response.json(
-      {
-        detail: "Backend connection failed",
-      },
-      {
-        status: 500,
-      }
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error("Get form error:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch form" },
+      { status: 500 }
     );
   }
 }
 
-export async function POST(request: Request) {
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await context.params;
     const body = await request.json();
-
-    const response = await fetch(`${BACKEND_URL}/forms/`, {
-      method: "POST",
+    
+    const response = await fetch(`http://localhost:8000/api/forms/${id}`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        title: body.title,
-      }),
+      body: JSON.stringify(body),
     });
 
     const data = await response.json();
 
-    return Response.json(data, {
-      status: response.status,
-    });
-  } catch (error) {
-    console.error("POST forms error:", error);
+    if (!response.ok) {
+      return NextResponse.json(
+        { error: data.detail || "Failed to update form" },
+        { status: response.status }
+      );
+    }
 
-    return Response.json(
-      {
-        detail: "Could not create form",
-      },
-      {
-        status: 500,
-      }
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error("Update form error:", error);
+    return NextResponse.json(
+      { error: "Failed to update form" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await context.params;
+    
+    const response = await fetch(`http://localhost:8000/api/forms/${id}`, {
+      method: "DELETE",
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return NextResponse.json(
+        { error: data.detail || "Failed to delete form" },
+        { status: response.status }
+      );
+    }
+
+    return NextResponse.json(data);
+  } catch (error) {
+    console.error("Delete form error:", error);
+    return NextResponse.json(
+      { error: "Failed to delete form" },
+      { status: 500 }
     );
   }
 }

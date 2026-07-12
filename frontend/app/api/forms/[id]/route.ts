@@ -1,73 +1,34 @@
-const BACKEND_URL = "http://127.0.0.1:8000";
+import { NextRequest, NextResponse } from "next/server";
 
-interface RouteContext {
-  params: Promise<{
-    id: string;
-  }>;
-}
-
-export async function GET(
-  request: Request,
-  context: RouteContext
+export async function PATCH(
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await context.params;
-
   try {
-    const response = await fetch(
-      `${BACKEND_URL}/forms/${id}`,
-      {
-        cache: "no-store",
-      }
-    );
+    const { id } = await context.params;
+    
+    const response = await fetch(`http://localhost:8000/api/forms/${id}/unpublish`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     const data = await response.json();
 
-    return Response.json(data, {
-      status: response.status,
-    });
+    if (!response.ok) {
+      return NextResponse.json(
+        { error: data.detail || "Failed to unpublish form" },
+        { status: response.status }
+      );
+    }
+
+    return NextResponse.json(data);
   } catch (error) {
-    console.error("GET form proxy error:", error);
-
-    return Response.json(
-      {
-        detail: "Could not load form",
-      },
-      {
-        status: 500,
-      }
-    );
-  }
-}
-
-export async function DELETE(
-  request: Request,
-  context: RouteContext
-) {
-  const { id } = await context.params;
-
-  try {
-    const response = await fetch(
-      `${BACKEND_URL}/forms/${id}`,
-      {
-        method: "DELETE",
-      }
-    );
-
-    const data = await response.json();
-
-    return Response.json(data, {
-      status: response.status,
-    });
-  } catch (error) {
-    console.error("DELETE form proxy error:", error);
-
-    return Response.json(
-      {
-        detail: "Could not delete form",
-      },
-      {
-        status: 500,
-      }
+    console.error("Unpublish error:", error);
+    return NextResponse.json(
+      { error: "Failed to unpublish form" },
+      { status: 500 }
     );
   }
 }
