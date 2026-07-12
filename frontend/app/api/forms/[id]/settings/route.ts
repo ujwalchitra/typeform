@@ -1,22 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) {
-  const { id } = await context.params;
+export async function GET(request: NextRequest, context: any) {
+  const params = await context.params;
+  const { id } = params;
   return NextResponse.json({ 
     message: "Settings route is working", 
     formId: id 
   });
 }
 
-export async function PATCH(
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: NextRequest, context: any) {
   try {
-    const { id } = await context.params;
+    const params = await context.params;
+    const { id } = params;
     
     const body = await request.json();
     

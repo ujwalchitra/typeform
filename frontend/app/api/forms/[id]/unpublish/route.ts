@@ -1,19 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PATCH(request: NextRequest, context: any) {
   try {
-    const response = await fetch(
-      `${process.env.BACKEND_URL}/api/forms/${params.id}/unpublish`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    // Handle params whether it's a Promise or plain object
+    const params = await context.params;
+    const { id } = params;
+    
+    const response = await fetch(`http://localhost:8000/api/forms/${id}/unpublish`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     const data = await response.json();
 
@@ -26,6 +24,7 @@ export async function PATCH(
 
     return NextResponse.json(data);
   } catch (error) {
+    console.error("Unpublish error:", error);
     return NextResponse.json(
       { error: "Failed to unpublish form" },
       { status: 500 }

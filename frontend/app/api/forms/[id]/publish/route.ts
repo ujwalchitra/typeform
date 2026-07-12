@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PATCH(
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: NextRequest, context: any) {
   try {
-    const { id } = await context.params;
+    const params = await context.params;
+    const { id } = params;
     
     const response = await fetch(`http://localhost:8000/api/forms/${id}/publish`, {
       method: "PATCH",

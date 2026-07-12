@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, context: any) {
   try {
-    const { id } = await context.params;
+    const params = await context.params;
+    const { id } = params;
     
     const response = await fetch(`http://localhost:8000/api/forms/${id}`, {
       cache: "no-store",
@@ -30,12 +28,10 @@ export async function GET(
   }
 }
 
-export async function PATCH(
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: NextRequest, context: any) {
   try {
-    const { id } = await context.params;
+    const params = await context.params;
+    const { id } = params;
     const body = await request.json();
     
     const response = await fetch(`http://localhost:8000/api/forms/${id}`, {
@@ -65,12 +61,10 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  context: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(request: NextRequest, context: any) {
   try {
-    const { id } = await context.params;
+    const params = await context.params;
+    const { id } = params;
     
     const response = await fetch(`http://localhost:8000/api/forms/${id}`, {
       method: "DELETE",
