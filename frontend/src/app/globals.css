@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-typeform-dark: #191919;
+  --color-typeform-accent: #0445AF;
+  --color-typeform-accent-hover: #033a94;
+  --color-typeform-bg: #f5f5f5;
+  --color-typeform-border: #e8e8e8;
+  --font-sans: var(--font-inter);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-out-left {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(-40px); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animate-slide-out-left {
+  animation: slide-out-left 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+body {
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Typeform-style input underline */
+.tf-input {
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.tf-input:focus {
+  border-bottom-color: rgba(255, 255, 255, 0.8);
+}
+
+.tf-input-dark {
+  border: none;
+  border-bottom: 2px solid #d0d0d0;
+  background: transparent;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.tf-input-dark:focus {
+  border-bottom-color: var(--color-typeform-accent);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
